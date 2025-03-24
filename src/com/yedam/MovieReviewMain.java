@@ -122,6 +122,59 @@ public class MovieReviewMain {
 			menu = Integer.parseInt(scn.nextLine());
 			switch (menu) {
 			case 1: // 영화 검색
+				System.out.println("검색하실 영화의 제목을 입력해주세요.");
+				System.out.print("> ");
+				String title = scn.nextLine();
+
+				if (app.movieList(title).isEmpty()) {
+					System.out.println("찾으시는 제목의 영화가 존재하지 않습니다.");
+					break;
+				} else {
+					System.out.println(
+							"-----------------------------------------------------------------------------------------");
+					System.out.println(" no.          제목                            감독         장르      개봉년도     별점");
+					System.out.println(
+							"-----------------------------------------------------------------------------------------");
+					for (int i = 0; i < app.movieList(title).size(); i++) {
+						System.out.println(app.movieList(title).get(i).showList());
+					}
+				}
+
+				System.out.println("확인하실 영화의 번호를 입력해주세요. (이전 메뉴로 돌아가기: q)");
+				System.out.print("> ");
+				String no = scn.nextLine();
+
+				if (no.equals("q")) {
+					break;
+				}else if (no.isBlank()) {
+					System.out.println("영화의 번호를 입력하여 주세요.");
+					break;
+				}
+				System.out.println(
+						"-----------------------------------------------------------------------------------------");
+				System.out.println(app.selectMovie(Integer.parseInt(no)).selectMovie());
+				
+				System.out.println(
+						"-----------------------------------------------------------------------------------------");
+				System.out.println("     1. 리뷰보기     2. 리뷰 작성     3. 관심 영화 등록     9. 이전메뉴로");
+				System.out.println(
+						"-----------------------------------------------------------------------------------------");
+				System.out.println("메뉴를 선택해주세요.");
+				System.out.print("> ");
+				menu = Integer.parseInt(scn.nextLine());
+				switch(menu) {
+				case 1: //리뷰보기
+					
+					break;
+				case 2: //리뷰작성
+					break;
+				case 3: //관심영화 등록
+					break;
+				case 9: //이전메뉴로
+				default: 
+					break;
+				}
+				
 				
 				break;
 			case 2: // 회원정보
@@ -130,7 +183,37 @@ public class MovieReviewMain {
 				if (!app.myName(uid).equals("관리자")) {
 					break;
 				}
-				
+
+				System.out.println("영화의 제목을 입력해주세요.");
+				System.out.print("> ");
+				title = scn.nextLine();
+
+				System.out.println("영화의 감독을 입력해주세요.");
+				System.out.print("> ");
+				String director = scn.nextLine();
+
+				System.out.println("영화의 개봉년도를 입력해주세요. (년도만 입력.)");
+				System.out.print("> ");
+				String date = scn.nextLine();
+
+				System.out.println("영화의 장르를 입력해주세요.");
+				System.out.print("> ");
+				String genre = scn.nextLine();
+
+				System.out.println("영화의 간단한 줄거리를 입력해주세요.");
+				System.out.print("> ");
+				String plot = scn.nextLine();
+
+				if (title.isBlank() || director.isBlank() || date.isBlank() || genre.isBlank() || plot.isBlank()) {
+					System.out.println("영화의 정보는 비워둘 수 없습니다.");
+					break;
+				}
+
+				if (!app.addMovie(title, director, date, genre, plot)) {
+					System.out.println("영화가 올바르게 등록되지 못했습니다. 다시 시도해주세요.");
+					break;
+				}
+
 				break;
 			case 9: // 프로그램 종료
 				run = false;

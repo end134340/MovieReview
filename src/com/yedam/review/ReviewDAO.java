@@ -3,7 +3,10 @@ package com.yedam.review;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewDAO {
 
@@ -109,6 +112,41 @@ public class ReviewDAO {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public List<Review> ReviewList(int code) {
+		Connection conn = getConnect();
+		List<Review> list = new ArrayList<Review>();
+		String sql = "SELECT  review_code " //
+				+ "           , movie_code " //
+				+ "           , user_id " //
+				+ "           , review" //
+				+ "           , TO_CHAR(star, '9.9') AS star " //
+				+ "           , edit " //
+				+ "   FROM    TBL_REVIEW " //
+				+ "   WHERE   movie_code = ? ";
+
+		try {
+			PreparedStatement prst = conn.prepareStatement(sql);
+			prst.setInt(1, code);
+
+			ResultSet rs = prst.executeQuery();
+
+			while (rs.next()) {
+				Review rv = new Review();
+
+				rv.setReviewCode(rs.getInt("review_code"));
+				rv.setMovieCode(rs.getInt("movie_code"));
+				rv.setUserId(rs.getString("user_id"));
+				rv.setStar(rs.getDouble("star"));
+				rv.setEdit(rs.getString("edit"));
+
+				list.add(rv);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }//

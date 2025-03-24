@@ -86,7 +86,6 @@ public class MovieDAO {
 				movie.setDirector(rs.getString("director"));
 				movie.setDate(rs.getString("release_date"));
 				movie.setGenre(rs.getString("genre"));
-				movie.setPlot(rs.getString("plot"));
 				movie.setStar(rs.getDouble("star"));
 				list.add(movie);
 			}
@@ -101,19 +100,20 @@ public class MovieDAO {
 	// 영화 단건 출력
 	public Movie movieSelect(int code) {
 		Connection conn = getConnect();
-		String sql = "SELECT  m.movie_code "//
+		String sql = "SELECT   m.movie_code "//
 				+ "		      , m.title "//
 				+ "		      , m.director "//
 				+ "		      , m.release_date "//
-				+ "		      , m.genre "//
+				+ "		      , m.genre"
+				+ "           , m.plot "//
 				+ "           , TO_CHAR(AVG(r.star), '9.9') AS star " //
-				+ "           , NVL(f.fine, 'FALSE') AS fine "//
+				+ "           , f.fine "//
 				+ "    FROM    TBL_MOVIE m LEFT JOIN TBL_REVIEW r "//
 				+ "                           ON m.movie_code = r.movie_code " //
 				+ "                        LEFT JOIN TBL_FINEMOVIE f "//
 				+ "                           ON m.movie_code = f.movie_code "//
-				+ "    WHERE   movie_code = ? "//
-				+ "    GROUP BY m.movie_code, m.title, m.director, m.release_date, m.genre, f.fine";
+				+ "    WHERE   m.movie_code = ? "//
+				+ "    GROUP BY m.movie_code, m.title, m.director, m.release_date, m.genre, m.plot, f.fine";
 
 		try {
 			PreparedStatement prst = conn.prepareStatement(sql);
@@ -127,6 +127,7 @@ public class MovieDAO {
 				movie.setDate(rs.getString("release_date"));
 				movie.setGenre(rs.getString("genre"));
 				movie.setPlot(rs.getString("plot"));
+				movie.setStar(rs.getDouble("star"));
 				movie.setFine(rs.getString("fine"));
 				return movie;
 			}
@@ -168,7 +169,7 @@ public class MovieDAO {
 				movie.setDirector(rs.getString("director"));
 				movie.setDate(rs.getString("release_date"));
 				movie.setGenre(rs.getString("genre"));
-				movie.setPlot(rs.getString("plot"));
+				movie.setStar(rs.getDouble("star"));
 				movie.setFine(rs.getString("fine"));
 				list.add(movie);
 			}

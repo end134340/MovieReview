@@ -87,7 +87,34 @@ public class Movie {
 	}
 
 	public String showList() {
-		return "[ " + movieCode + " ]  " + title + "          " + director + "     " + genre + "     " + date + "     " + star;
+		return "[ " + movieCode + " ]  " + title + "          " + director + "    " + genre + "     " + date + "     "
+				+ star;
+	}
+
+	public String selectMovie() {
+		String str = "";
+		String stars = "";
+		if (fine == null) {
+			str = "♡";
+		} else {
+			if (fine.equals("FALSE")) {
+				str = "♡";
+			} else if (fine.equals("TRUE")) {
+				str = "♥";
+			}
+		}
+		for (int i = 1; i <= star; i++) {
+			stars += "★";
+		}
+		while (stars.length() < 5) {
+			stars += "☆";
+		}
+
+		return "no [ " + movieCode + " ] " + title + "\n" //
+				+ "감독: " + director + " | 장르: " + genre + " | 개봉년도: " + date + "\n" //
+				+ "줄거리:" + plot + "\n"//
+				+ "-----------------------------------------------------------------------------------------\n" //
+				+ "  " + stars + " (" + star + ") " + "          관심영화 " + str;
 	}
 
 }
