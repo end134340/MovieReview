@@ -107,14 +107,14 @@ public class Movie {
 
 	public String selectMovie() {
 
-		String str = "";
+		String str = "♡";
 		String stars = "";
 		if (fine == null) {
 			str = "♡";
 		} else {
-			if (fine.equals("0")) {
+			if (fine.equals("FALSE")) {
 				str = "♡";
-			} else if (fine.equals("1")) {
+			} else if (fine.equals("TRUE")) {
 				str = "♥";
 			}
 		}
