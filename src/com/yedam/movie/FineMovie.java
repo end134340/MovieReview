@@ -5,14 +5,18 @@ public class FineMovie {
 	private String userId;
 	private String fine;
 
-	FineMovie() {
+	public FineMovie() {
 	}
 
 	public FineMovie(int movieCode, String userId, String fine) {
-		super();
 		this.movieCode = movieCode;
 		this.userId = userId;
 		this.fine = fine;
+	}
+	
+	public FineMovie(int movieCode, String userId) {
+		this.movieCode = movieCode;
+		this.userId = userId;
 	}
 
 	public int getMovieCode() {

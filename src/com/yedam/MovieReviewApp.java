@@ -2,8 +2,10 @@ package com.yedam;
 
 import java.util.List;
 
+import com.yedam.movie.FineMovie;
 import com.yedam.movie.Movie;
 import com.yedam.movie.MovieDAO;
+import com.yedam.review.Review;
 import com.yedam.review.ReviewDAO;
 import com.yedam.user.User;
 import com.yedam.user.UserDAO;
@@ -52,13 +54,17 @@ public class MovieReviewApp {
 	public String myName(String uid) {
 		return udao.whoami(uid);
 	}
-	// 로그인 부분==============================================================
 
 	// 영화 부분================================================================
 
 	// 영화 등록
 	public boolean addMovie(String title, String director, String date, String genre, String plot) {
-		Movie movie = new Movie(title, director, date, genre, plot);
+		Movie movie = new Movie();
+		movie.setTitle(title);
+		movie.setDirector(director);
+		movie.setDate(date);
+		movie.setGenre(genre);
+		movie.setPlot(plot);
 		if (mdao.insertMovie(movie)) {
 			return true;
 		}
@@ -79,6 +85,110 @@ public class MovieReviewApp {
 		return null;
 	}
 
-	// 영화 부분================================================================
+	// 관심영화 조회 메소드
+	public String favorit(String id, int code) {
+		FineMovie fm = new FineMovie();
+		fm.setMovieCode(code);
+		fm.setUserId(id);
+		String result = mdao.favoritMovie(fm);
+		return result;
+	}
+
+	// 관심 영화 최초 등록
+	public boolean addFavoritMovie(int code, String id) {
+		FineMovie fm = new FineMovie();
+		fm.setFine("TRUE");
+		fm.setMovieCode(code);
+		fm.setUserId(id);
+		if (mdao.favoritMovieInsert(fm)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	// 관심영화 토글
+	public boolean modifyFavoritMovie(int code, String id) {
+		FineMovie fm = new FineMovie();
+		fm.setMovieCode(code);
+		fm.setUserId(id);
+		String result = favorit(id, code);
+
+		if (result.equals("TRUE")) {
+			fm.setFine("FALSE");
+		} else if (result.equals("FALSE")) {
+			fm.setFine("TRUE");
+		}
+
+		if (mdao.favoritMovieEdit(fm)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 관심영화 리스트
+	public List<Movie> favoritMovieList(String id) {
+		return mdao.movieFavoritList(id);
+	}
+
+	// 리뷰 부분================================================================
+
+	// 리뷰 리스트
+	public List<Review> reviewList(int code) {
+		return rdao.ReviewList(code);
+	}
+
+	// 리뷰 등록
+	public boolean addReview(int code, String id, String review, double star) {
+		Review rv = new Review();
+		rv.setMovieCode(code);
+		rv.setUserId(id);
+		rv.setReview(review);
+		rv.setStar(star);
+		if (rdao.addReview(rv)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 리뷰 수정
+	public boolean modifyReview(int code, String review, double star, String id) {
+		Review rv = new Review();
+		rv.setReviewCode(code);
+		rv.setReview(review);
+		rv.setStar(star);
+		rv.setUserId(id);
+		if (rdao.modifyReview(rv)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 리뷰 삭제
+	public boolean removeReview(int code, String id) {
+		Review rv = new Review();
+		rv.setReviewCode(code);
+		rv.setUserId(id);
+		if (rdao.deleteReview(rv)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 관리자용 삭제
+	public boolean adminDelete(int code, String review) {
+		Review rv = new Review();
+		rv.setReviewCode(code);
+		rv.setReview(review);
+		if (rdao.deleteAdminReview(rv)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 자기가 쓴 리뷰 목록
+	public List<Review> ownReviewList(String id) {
+		return rdao.myReviewList(id);
+	}
 
 }//

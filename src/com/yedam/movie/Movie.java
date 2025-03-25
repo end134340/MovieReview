@@ -87,19 +87,34 @@ public class Movie {
 	}
 
 	public String showList() {
-		return "[ " + movieCode + " ]  " + title + "          " + director + "    " + genre + "     " + date + "     "
-				+ star;
+		String tspace = "";
+		String dspace = "";
+		if(title.length() >= 17) {
+			tspace = "             ";
+		}else {
+			tspace = "                          ";
+		}
+		if(director.length() >= 7) {
+			dspace = "    ";
+		}else {
+			dspace = "      ";
+		}
+		
+		
+		return "[ " + movieCode + " ]  " + title + tspace + director + dspace + genre + "    " + date
+				+ "   " + star;
 	}
 
 	public String selectMovie() {
+
 		String str = "";
 		String stars = "";
 		if (fine == null) {
 			str = "♡";
 		} else {
-			if (fine.equals("FALSE")) {
+			if (fine.equals("0")) {
 				str = "♡";
-			} else if (fine.equals("TRUE")) {
+			} else if (fine.equals("1")) {
 				str = "♥";
 			}
 		}

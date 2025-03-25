@@ -1,32 +1,21 @@
 package com.yedam.movie;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yedam.MovieDBMS;
+
 public class MovieDAO {
 
-	Connection getConnect() {
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String userId = "scott";
-		String userPw = "tiger";
-
-		try {
-			Connection conn = DriverManager.getConnection(url, userId, userPw);
-			return conn;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	MovieDBMS db = new MovieDBMS();
 
 	public boolean insertMovie(Movie movie) {
 
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "INSERT INTO TBL_MOVIE ( movie_code " //
 				+ "                           , title " //
 				+ "                           , director " //
@@ -34,7 +23,7 @@ public class MovieDAO {
 				+ "                           , genre " //
 				+ "                           , plot ) " //
 				+ "   VALUES ( movie_seq.nextval " //
-				+ "            , ? )" //
+				+ "            , ? " //
 				+ "            , ? " //
 				+ "            , ? " //
 				+ "            , ? " //
@@ -63,7 +52,7 @@ public class MovieDAO {
 	// 영화 이름으로 검색
 	public List<Movie> movieSearchList(String title) {
 		List<Movie> list = new ArrayList<Movie>();
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT  m.movie_code "//
 				+ "		      , m.title "//
 				+ "		      , m.director "//
@@ -99,13 +88,12 @@ public class MovieDAO {
 
 	// 영화 단건 출력
 	public Movie movieSelect(int code) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT   m.movie_code "//
 				+ "		      , m.title "//
 				+ "		      , m.director "//
 				+ "		      , m.release_date "//
-				+ "		      , m.genre"
-				+ "           , m.plot "//
+				+ "		      , m.genre" + "           , m.plot "//
 				+ "           , TO_CHAR(AVG(r.star), '9.9') AS star " //
 				+ "           , f.fine "//
 				+ "    FROM    TBL_MOVIE m LEFT JOIN TBL_REVIEW r "//
@@ -142,7 +130,7 @@ public class MovieDAO {
 	// 관심영화 리스트
 	public List<Movie> movieFavoritList(String userId) {
 		List<Movie> list = new ArrayList<Movie>();
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT  m.movie_code "//
 				+ "		      , m.title "//
 				+ "		      , m.director "//
@@ -155,7 +143,7 @@ public class MovieDAO {
 				+ "                        LEFT JOIN TBL_FINEMOVIE f "//
 				+ "                           ON m.movie_code = f.movie_code "//
 				+ "    WHERE   f.user_id = ? " //
-				+ "    AND     LOWER(fine) = 'true'"//
+				+ "    AND     UPPER(fine) = 'TRUE'"//
 				+ "    GROUP BY m.movie_code, m.title, m.director, m.release_date, m.genre, f.fine";
 
 		try {
@@ -181,9 +169,33 @@ public class MovieDAO {
 		return list;
 	}
 
+	// 관심영화 단건조회
+	public String favoritMovie(FineMovie fm) {
+		Connection conn = db.getConnect();
+		String sql = "SELECT fine " //
+				+ "   FROM   TBL_FINEMOVIE " //
+				+ "   WHERE  user_id = ? " //
+				+ "   AND    movie_code = ?";
+		String result = "";
+
+		try {
+			PreparedStatement prst = conn.prepareStatement(sql);
+			prst.setString(1, fm.getUserId());
+			prst.setInt(2, fm.getMovieCode());
+
+			ResultSet rs = prst.executeQuery();
+			if (rs.next()) {
+				result = rs.getString("fine");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	// 관심영화 등록(최초)
-	public boolean favoritMovie(FineMovie fm) {
-		Connection conn = getConnect();
+	public boolean favoritMovieInsert(FineMovie fm) {
+		Connection conn = db.getConnect();
 		String sql = "INSERT INTO tbl_finemovie ( movie_code "//
 				+ "                               , user_id "//
 				+ "                               , fine ) " //
@@ -208,10 +220,10 @@ public class MovieDAO {
 
 		return false;
 	}
-	
-	//관심영화 토글
+
+	// 관심영화 토글
 	public boolean favoritMovieEdit(FineMovie fm) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "UPDATE tbl_finemovie" //
 				+ "   SET    fine = ? " //
 				+ "   WHERE  movie_code = ? " //

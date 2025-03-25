@@ -1,5 +1,7 @@
 package com.yedam.review;
 
+import com.yedam.user.UserDAO;
+
 public class Review {
 
 	private int reviewCode;
@@ -9,21 +11,40 @@ public class Review {
 	private double star;
 	private String edit;
 
-	Review() {
+	public Review() {
 	}
 
-	public Review(int movieCode, String userId, String review, int star) {
+	public Review(int movieCode, String userId, String review, double star) {
 		this.movieCode = movieCode;
 		this.userId = userId;
 		this.review = review;
 		this.star = star;
 	}
 
-	public Review(int reviewCode, String review, int star, String edit) {
+	public Review(int reviewCode, String review, double star, String userId) {
 		this.reviewCode = reviewCode;
+		this.userId = userId;
 		this.review = review;
 		this.star = star;
-		this.edit = edit;
+	}
+
+	public String showReviewList() {
+		UserDAO dao = new UserDAO();
+		String stars = "";
+		String str = "";
+		
+		for (int i = 1; i <= star; i++) {
+			stars += "★";
+		}
+		while (stars.length() < 5) {
+			stars += "☆";
+		}
+
+		if (edit.equals("TRUE")) {
+			str = "*";
+		}
+
+		return reviewCode + ")" + str + "  " + dao.whoami(userId) + "  " + stars + "       " + review;
 	}
 
 	public int getReviewCode() {

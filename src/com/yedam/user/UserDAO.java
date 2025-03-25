@@ -1,31 +1,20 @@
 package com.yedam.user;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.yedam.MovieDBMS;
+
 public class UserDAO {
 
-	Connection getConnect() {
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String userId = "scott";
-		String userPw = "tiger";
-
-		try {
-			Connection conn = DriverManager.getConnection(url, userId, userPw);
-			return conn;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
+	MovieDBMS db = new MovieDBMS();
+	
 	// 회원가입
 	public boolean addUser(User user) {
 
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "INSERT INTO TBL_USER (user_id " //
 				+ "                         , user_pw " //
 				+ "                         , user_name )" //
@@ -54,7 +43,7 @@ public class UserDAO {
 
 	// 유저 로그인
 	public boolean loginUser(User user) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT user_id " //
 				+ "          , user_pw " //
 				+ "   FROM   tbl_user " //
@@ -79,7 +68,7 @@ public class UserDAO {
 
 	// 유저이름 반환
 	public String whoami(String userId) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT  user_name " //
 				+ "   FROM    TBL_USER" //
 				+ "   WHERE   user_id = ?";
@@ -100,7 +89,7 @@ public class UserDAO {
 	
 	//유저아이디 중복체크
 	public boolean idCheck(String userId) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT  user_id " //
 				+ "   FROM    TBL_USER" //
 				+ "   WHERE   user_id = ?";
@@ -121,7 +110,7 @@ public class UserDAO {
 	
 	//유저 이름 중복체크
 	public boolean nameCheck(String userName) {
-		Connection conn = getConnect();
+		Connection conn = db.getConnect();
 		String sql = "SELECT  user_name " //
 				+ "   FROM    TBL_USER" //
 				+ "   WHERE   user_name = ?";
