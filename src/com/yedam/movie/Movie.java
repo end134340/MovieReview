@@ -89,11 +89,15 @@ public class Movie {
 	public String showList() {
 		String tspace = "";
 		String dspace = "";
+		
 		if(title.length() >= 17) {
 			tspace = "             ";
-		}else {
+		}else if(title.length() >= 5){
 			tspace = "                          ";
+		}else {
+			tspace = "                               ";
 		}
+		
 		if(director.length() >= 7) {
 			dspace = "    ";
 		}else {
