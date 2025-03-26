@@ -176,7 +176,7 @@ public class MovieDAO {
 				+ "   FROM   TBL_FINEMOVIE " //
 				+ "   WHERE  user_id = ? " //
 				+ "   AND    movie_code = ?";
-		String result = "";
+		String result = null;
 
 		try {
 			PreparedStatement prst = conn.prepareStatement(sql);
@@ -246,5 +246,6 @@ public class MovieDAO {
 
 		return false;
 	}
+
 
 }//

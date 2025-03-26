@@ -99,9 +99,8 @@ public class MovieReviewMain {
 				} else {
 					System.out.println("회원가입이 정상적으로 완료되셨습니다.");
 				}
-				break;
 			default:
-				break;
+				continue;
 			}
 			break;
 		}
@@ -169,7 +168,7 @@ public class MovieReviewMain {
 				switch (menu) {
 				case 1: // 리뷰보기
 					if (app.reviewList(Integer.parseInt(no)).size() > 0) {
-						System.out.println("no  닉네임    별점                리뷰");
+						System.out.println("no   닉네임     별점                리뷰");
 						System.out.println(
 								"-----------------------------------------------------------------------------------------");
 						for (int i = 0; i < app.reviewList(Integer.parseInt(no)).size(); i++) {
@@ -296,7 +295,7 @@ public class MovieReviewMain {
 					}
 					break;
 				case 3: // 관심영화 등록
-					if (app.favorit(uid, Integer.parseInt(no)).isBlank()) {
+					if (app.favorit(uid, Integer.parseInt(no)) == null ) {
 						if (app.addFavoritMovie(Integer.parseInt(no), uid)) {
 							System.out.println("관심 영화로 등록되었습니다.");
 							break;
@@ -305,7 +304,11 @@ public class MovieReviewMain {
 						}
 					} else {
 						if (app.modifyFavoritMovie(Integer.parseInt(no), uid)) {
-							System.out.println("관심 영화로 등록되었습니다.");
+							if(app.favorit(uid, Integer.parseInt(no)).equals("TRUE")) {								
+								System.out.println("관심 영화로 등록되었습니다.");
+							} else if(app.favorit(uid, Integer.parseInt(no)).equals("FALSE")) {
+								System.out.println("관심 영화가 해제되었습니다.");
+							}
 							break;
 						} else {
 							System.out.println("관심영화로 등록되지 못했습니다. 다시 시도해주세요.");
@@ -336,11 +339,13 @@ public class MovieReviewMain {
 					if (reviewList.size() > 0) {
 						System.out.println(
 								"-----------------------------------------------------------------------------------------");
-						System.out.println("no  닉네임    별점                리뷰");
+						System.out.println("no   닉네임     별점                리뷰                      영화 제목 ");
 						System.out.println(
 								"-----------------------------------------------------------------------------------------");
 						for (int i = 0; i < reviewList.size(); i++) {
-							System.out.println(reviewList.get(i).showReviewList());
+							System.out.println(reviewList.get(i).showReviewList() // 
+									+ "          " //
+									+ app.selectMovie(reviewList.get(i).getMovieCode()).getTitle());
 						}
 					} else {
 						System.out.println("작성한 리뷰가 없습니다.");
@@ -363,6 +368,8 @@ public class MovieReviewMain {
 						System.out.println("  1. 영화 상세 보기                   9. 이전메뉴");
 						System.out.println(
 								"-----------------------------------------------------------------------------------------");
+						System.out.println("메뉴를 선택해주세요.");
+						System.out.print("> ");
 						menu = Integer.parseInt(scn.nextLine());
 						switch (menu) {
 						case 1:// 영화 상세보기

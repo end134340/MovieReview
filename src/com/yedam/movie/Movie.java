@@ -111,7 +111,7 @@ public class Movie {
 
 	public String selectMovie() {
 
-		String str = "♡";
+		String str = "";
 		String stars = "";
 		if (fine == null) {
 			str = "♡";
