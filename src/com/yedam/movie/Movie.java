@@ -89,51 +89,41 @@ public class Movie {
 	public String showList() {
 		String tspace = "";
 		String dspace = "";
-		
-		if(title.length() >= 17) {
+
+		if (title.length() >= 17) {
 			tspace = "             ";
-		}else if(title.length() >= 5){
+		} else if (title.length() >= 5) {
 			tspace = "                          ";
-		}else {
+		} else {
 			tspace = "                               ";
 		}
-		
-		if(director.length() >= 7) {
+
+		if (director.length() >= 7) {
 			dspace = "    ";
-		}else {
+		} else {
 			dspace = "      ";
 		}
-		
-		
-		return "[ " + movieCode + " ]  " + title + tspace + director + dspace + genre + "    " + date
-				+ "   " + star;
+
+		return "[ " + movieCode + " ]  " + title + tspace + director + dspace + genre + "    " + date + "   " + star;
 	}
 
 	public String selectMovie() {
 
-		String str = "";
+		return "no [ " + movieCode + " ] " + title + "\n" //
+				+ "감독: " + director + " | 장르: " + genre + " | 개봉년도: " + date + "\n" //
+				+ "줄거리:" + plot + "\n"//
+				+ "-----------------------------------------------------------------------------------------\n";
+	}
+
+	public String selectStar() {
 		String stars = "";
-		if (fine == null) {
-			str = "♡";
-		} else {
-			if (fine.equals("FALSE")) {
-				str = "♡";
-			} else if (fine.equals("TRUE")) {
-				str = "♥";
-			}
-		}
 		for (int i = 1; i <= star; i++) {
 			stars += "★";
 		}
 		while (stars.length() < 5) {
 			stars += "☆";
 		}
-
-		return "no [ " + movieCode + " ] " + title + "\n" //
-				+ "감독: " + director + " | 장르: " + genre + " | 개봉년도: " + date + "\n" //
-				+ "줄거리:" + plot + "\n"//
-				+ "-----------------------------------------------------------------------------------------\n" //
-				+ "  " + stars + " (" + star + ") " + "          관심영화 " + str;
+		return "  " + stars + " (" + star + ") ";
 	}
 
 }

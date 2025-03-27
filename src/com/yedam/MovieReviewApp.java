@@ -93,6 +93,23 @@ public class MovieReviewApp {
 		String result = mdao.favoritMovie(fm);
 		return result;
 	}
+	
+	//fine값이 자꾸 true로 나와서 따로 뺌
+	public String favoritMark(String id, int code) {
+		String str = "♡";
+
+		String fine = favorit(id, code);
+		if (fine == null) {
+			str = "♡";
+		} else {
+			if (fine.equals("FALSE")) {
+				str = "♡";
+			} else if (fine.equals("TRUE")) {
+				str = "♥";
+			}
+		}
+		return "          관심영화 " + str;
+	}
 
 	// 관심 영화 최초 등록
 	public boolean addFavoritMovie(int code, String id) {
